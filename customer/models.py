@@ -8,7 +8,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=50)
     contact = models.CharField(max_length=10)
     email = models.CharField(max_length=50)
-    comments = models.CharField()
+    comments = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return (f'<Id: {self.id} Name: {self.first_name} Contact: {self.contact}')
@@ -25,9 +25,9 @@ class Destination(models.Model):
 
 class Address(models.Model):
     building_name = models.CharField(max_length=50)
-    building_no = models.Integer()
-    description = models.CharField(blank=True)
-    floor = models.Integer()
+    building_no = models.IntegerField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    floor = models.IntegerField(blank=True, null=True)
     street_name = models.CharField(max_length=50)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
 
