@@ -1,4 +1,3 @@
-from unicodedata import category, name
 from django.db import models
 
 # Models for the Product App.
