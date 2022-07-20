@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        {% load static %}
+        <link rel="shortcut icon" href="{% static 'product/favicon.ico' %}" type="image/png"/>
+        <link rel="stylesheet" href="{% static 'product/style.css' %}" type="text/css">
+        <title>Products | Tailoring Unit</title>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/">Products</a></li>
+                    <li><a href="/">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div id="vue-app">
+            <main>
+                <aside><img class="logo" src="{% static 'product/images/logo.png' %}" alt="JKUAT logo"></aside>
+                <article>
+                    <h1>All Products</h1>
+                    <section class="columns-desktop">
+                        <div class="product">
+                            <img src="{% static 'product/images/polo-collar.png' %}" alt="">
+                            <div class="columns">
+                                <div class="title">Pollo T-Shirt</div>
+                                <div class="price">500.00Ksh</div>
+                            </div>
+                            <p class="desc">available</p>
+                            <button data-order="">Order</button>
+                            <div class="cart-quantity-button">
+                                <button class="quantity-btn" id="decrement-btn">-</button>
+                                <input 
+                                    type="text" 
+                                    name="item-quantity" 
+                                    id="bar" 
+                                    value="1" 
+                                    min="1" 
+                                    max="5"
+                                    disabled
+                                >
+                                <button class="quantity-btn" id="increment-btn">+</button>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+                <aside>
+                    <div class="cart-container">
+                        <div class="cart-header">
+                            <img class="cart-icon" src="{% static 'product/icons/cart-logo.svg' %}" alt="Cart Logo">
+                            <p>Your Cart</p>
+                        </div>
+                        <div class="cart-items">
+                            <div class="cart-item">
+                                <div class="content-columns">
+                                    <img class="product-thumbnail" src="images/blueberry-product.jpeg" alt="">
+                                    <div class="content-titles">
+                                        <p>price:</p>
+                                        <p>quantity:</p>
+                                        <p>total:</p>
+                                    </div>
+                                    <div class="content-values">
+                                        <p>$13.50</p>
+                                        <p>1</p>
+                                        <p>13.50</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cart-item">
+                                <div class="content-columns">
+                                    <img class="product-thumbnail" src="images/apple-product.jpeg" alt="">
+                                    <div class="content-titles">
+                                        <p>price:</p>
+                                        <p>quantity:</p>
+                                        <p>total:</p>
+                                    </div>
+                                    <div class="content-values">
+                                        <p>$12.99</p>
+                                        <p>3</p>
+                                        <p>38.97</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-footer">
+                            <div class="content subtotal">
+                                <p class="key">Subtotal</p>
+                                <p class="value">0.00</p>
+                            </div>
+                            <div class="content total">
+                                <p class="key">Total</p>
+                                <p class="value">0.00</p>
+                            </div>
+                            <button>Place Order</button>
+                        </div>
+                    </div>
+                </aside>
+            </main>
+        </div>
+
+
+        <!--  Include required files  -->
+        <script rel="script" src="{% static 'product/assets/vue.js' %}" type="text/javascript"></script>
+        <script rel="script" src="{% static 'product/assets/axios.min.js' %}" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            let app = new Vue({
+                el: '#vue-app',
+                delimiters: ['[[', ']]'],
+                data: {
+                    productItems: [],
+                },
+            });
+        </script>
+
+
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/">Products</a></li>
+                    <li><a href="/">Contact Us</a></li>
+                </ul>
+            </nav>
+        </footer>
+    </body>
+</html>
