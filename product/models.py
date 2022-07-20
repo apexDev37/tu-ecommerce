@@ -8,7 +8,7 @@ class Category(models.Model):
     description = models.TextField()
 
     def __str__(self) -> str:
-        return (f'<Id: {self.id} Name: {self.name}')
+        return (f'{self.name}')
 
 
 
@@ -21,4 +21,4 @@ class Product(models.Model):
     image_path = models.TextField()
 
     def __str__(self) -> str:
-        return (f'<Id: {self.id} Name: {self.title} Price: {self.price}')
+        return (f'{self.title}')
