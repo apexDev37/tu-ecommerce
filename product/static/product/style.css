@@ -289,11 +289,25 @@
       box-shadow: rgb(0 0 0 / 20%) 0px 3px 10px;
     }
   
+    .place-order-btn {
+      width: 162px;
+      height: 44px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFFFFF;
+      background-color: #4DCFA8;
+      padding: 12px 32px;
+      border-radius: 8px;
+      border-style: none;
+      cursor: pointer;
+      box-shadow: rgb(0 0 0 / 20%) 0 3px 10px;
+    }
+
     .product-thumbnail {
       width: 90px;
       height: 112px;
       border-radius: 16px;
-      object-fit: none;
+      object-fit: scale-down;
       object-position: center;
       margin-right: 32px;
       /* background-size: center; */

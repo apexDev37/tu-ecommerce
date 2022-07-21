@@ -45,23 +45,30 @@
                             <!-- Product item order btn -->
                             <button 
                                 v-if="productItem.quantity === 0"
-                                
+                                @click="incrementProductItemQuantity(productItem)" 
                             >Order</button>
                             <div class="cart-quantity-button" v-else>
                                 <button 
                                     class="quantity-btn" 
                                     id="decrement-btn"
+                                    @click="decrementProductItemQuantity(productItem)"
                                 >-</button>
                                 <input 
                                     type="text" 
                                     name="item-quantity" 
                                     id="bar" 
-                                    value="1" 
+                                    :value="productItem.quantity" 
                                     min="1" 
                                     max="5"
                                     disabled
                                 >
-                                <button class="quantity-btn" id="increment-btn">+</button>
+                                <button 
+                                    class="quantity-btn" 
+                                    id="increment-btn"
+                                    @click="incrementProductItemQuantity(productItem)"
+                                    :disabled="productItem.quantity === 5"
+                                    :style="productItem.quantity === 5? disabledBtnStyle : '' "
+                                >+</button>
                             </div>
                         
                         </div>
@@ -76,38 +83,29 @@
                             <img class="cart-icon" src="{% static 'product/icons/cart-logo.svg' %}" alt="Cart Logo">
                             <p>Your Cart</p>
                         </div>
+
+                        <!-- Cart Items -->
                         <div class="cart-items">
-                            <div class="cart-item">
+                            <div class="cart-item"
+                                v-for="cartItem in customerCart"
+                                :key="cartItem.id">
+
                                 <div class="content-columns">
-                                    <img class="product-thumbnail" src="{% static 'product/images/polo-collar.png' %}" alt="">
+                                    <img class="product-thumbnail" :src="getImagePath(cartItem)" :alt="cartItem.title">
                                     <div class="content-titles">
                                         <p>price:</p>
                                         <p>quantity:</p>
                                         <p>total:</p>
                                     </div>
                                     <div class="content-values">
-                                        <p>$13.50</p>
-                                        <p>1</p>
-                                        <p>13.50</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cart-item">
-                                <div class="content-columns">
-                                    <img class="product-thumbnail" src="{% static 'product/images/lab-coat.png' %}" alt="">
-                                    <div class="content-titles">
-                                        <p>price:</p>
-                                        <p>quantity:</p>
-                                        <p>total:</p>
-                                    </div>
-                                    <div class="content-values">
-                                        <p>$12.99</p>
-                                        <p>3</p>
-                                        <p>38.97</p>
+                                        <p>[[ cartItem.price ]]</p>
+                                        <p>[[ cartItem.quantity ]]</p>
+                                        <p>[[ (cartItem.price * cartItem.quantity).toFixed(2) ]]</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="cart-footer">
                             <div class="content subtotal">
                                 <p class="key">Subtotal</p>
@@ -115,9 +113,12 @@
                             </div>
                             <div class="content total">
                                 <p class="key">Total</p>
-                                <p class="value">0.00</p>
+                                <p class="value">[[ cartTotalPrice ]]Ksh</p>
                             </div>
-                            <button>Place Order</button>
+                            <button
+                                class="place-order-btn"
+                                v-if="showPlaceOrderBtn"
+                            >Place Order</button>
                         </div>
                     </div>
                 </aside>
@@ -138,10 +139,29 @@
                 el: '#vue-app',
                 delimiters: ['[[', ']]'],
                 data: {
+                    disabledBtnStyle: {
+                        backgroundColor: 'rgb(39, 34, 53, 0.75)', 
+                        border: 'rgb(39, 34, 53, 0.75)'
+                    },
                     products: [],
                 },
                 computed: {
-                    
+                    customerCart: function () {
+                        const addedToCart = this.products.filter(productItem => productItem.quantity >= 1)
+                        sessionStorage.cartItems = JSON.stringify(addedToCart)
+                        return addedToCart
+                    },
+                    cartTotalPrice: function () {
+                        return (this.customerCart.length >= 1)
+                            ? this.customerCart
+                                .map(cartItem => (cartItem.price * cartItem.quantity))
+                                .reduce((prev, next) => prev + next)
+                                .toFixed(2)
+                            : 0
+                    },
+                    showPlaceOrderBtn: function () {
+                        return this.customerCart.length >= 1
+                    },
                 },
                 methods: {
                     getProducts: async () => {
@@ -163,7 +183,21 @@
                         return (productItem.is_available)
                             ? 'available'
                             : 'unavailable'
-                    } 
+                    },
+                    incrementProductItemQuantity: function (productUdated) {
+                        this.products = this.products.map(productItem =>
+                            (productItem.id === productUdated.id)
+                                ? {...productItem, quantity: productUdated.quantity + 1}
+                                : productItem
+                        )
+                    },
+                    decrementProductItemQuantity: function (productUdated) {
+                        this.products = this.products.map(productItem =>
+                            (productItem.id === productUdated.id)
+                                ? {...productItem, quantity: productUdated.quantity - 1}
+                                : productItem
+                        )
+                    },
                 },
                 async created() {
                     const products = await this.getProducts()
