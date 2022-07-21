@@ -24,7 +24,7 @@ def get_all_products(request):
     response: a list of all products from db
     """
 
-    products = get_list_or_404(Product, is_available=True)
+    products = Product.objects.all().order_by('title')
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 

@@ -21,21 +21,37 @@
             </nav>
         </header>
         <div id="vue-app">
+
             <main>
                 <aside><img class="logo" src="{% static 'product/images/logo.png' %}" alt="JKUAT logo"></aside>
+                
                 <article>
                     <h1>All Products</h1>
                     <section class="columns-desktop">
-                        <div class="product">
-                            <img src="{% static 'product/images/polo-collar.png' %}" alt="">
+                        
+                        <!-- Product item -->
+                        <div class="product"
+                            v-for="productItem in products"
+                            :key="productItem.id">
+
+                            <!-- Product item image and content -->
+                            <img :src="getImagePath(productItem)" :alt="productItem.title">
                             <div class="columns">
-                                <div class="title">Pollo T-Shirt</div>
-                                <div class="price">500.00Ksh</div>
+                                <div class="title">[[ productItem.title ]]</div>
+                                <div class="price">[[ productItem.price ]]Ksh</div>
                             </div>
-                            <p class="desc">available</p>
-                            <button data-order="">Order</button>
-                            <div class="cart-quantity-button">
-                                <button class="quantity-btn" id="decrement-btn">-</button>
+                            <p class="desc">[[ getProductItemStatus(productItem) ]]</p>
+
+                            <!-- Product item order btn -->
+                            <button 
+                                v-if="productItem.quantity === 0"
+                                
+                            >Order</button>
+                            <div class="cart-quantity-button" v-else>
+                                <button 
+                                    class="quantity-btn" 
+                                    id="decrement-btn"
+                                >-</button>
                                 <input 
                                     type="text" 
                                     name="item-quantity" 
@@ -47,10 +63,14 @@
                                 >
                                 <button class="quantity-btn" id="increment-btn">+</button>
                             </div>
+                        
                         </div>
                     </section>
                 </article>
+
                 <aside>
+
+                    <!-- Customer Cart -->
                     <div class="cart-container">
                         <div class="cart-header">
                             <img class="cart-icon" src="{% static 'product/icons/cart-logo.svg' %}" alt="Cart Logo">
@@ -59,7 +79,7 @@
                         <div class="cart-items">
                             <div class="cart-item">
                                 <div class="content-columns">
-                                    <img class="product-thumbnail" src="images/blueberry-product.jpeg" alt="">
+                                    <img class="product-thumbnail" src="{% static 'product/images/polo-collar.png' %}" alt="">
                                     <div class="content-titles">
                                         <p>price:</p>
                                         <p>quantity:</p>
@@ -74,7 +94,7 @@
                             </div>
                             <div class="cart-item">
                                 <div class="content-columns">
-                                    <img class="product-thumbnail" src="images/apple-product.jpeg" alt="">
+                                    <img class="product-thumbnail" src="{% static 'product/images/lab-coat.png' %}" alt="">
                                     <div class="content-titles">
                                         <p>price:</p>
                                         <p>quantity:</p>
@@ -109,12 +129,47 @@
         <script rel="script" src="{% static 'product/assets/vue.js' %}" type="text/javascript"></script>
         <script rel="script" src="{% static 'product/assets/axios.min.js' %}" type="text/javascript"></script>
 
+        <!--  VueJs   -->
         <script type="text/javascript">
+            const BASE_URL = 'http://127.0.0.1:8000/api/v1/products/'
+            const IMAGE_PATH = "{% static 'product/images%s' %}"
+
             let app = new Vue({
                 el: '#vue-app',
                 delimiters: ['[[', ']]'],
                 data: {
-                    productItems: [],
+                    products: [],
+                },
+                computed: {
+                    
+                },
+                methods: {
+                    getProducts: async () => {
+                        try {
+                            const response = await axios.get(`${BASE_URL}`)
+                            const products = response.data
+
+                            console.log(`GET: getProducts \n`, products)
+                            return products
+                        } catch (errors) {
+                            console.log(errors)
+                        }
+                    },
+                    getImagePath : function(productItem) { 
+                        const imagePath = productItem.image_path 
+                        return `/static/product/images/${imagePath}`
+                    },
+                    getProductItemStatus : function(productItem) {
+                        return (productItem.is_available)
+                            ? 'available'
+                            : 'unavailable'
+                    } 
+                },
+                async created() {
+                    const products = await this.getProducts()
+                    this.products = products.map(productItem => ({
+                        ...productItem, quantity: 0
+                    }))
                 },
             });
         </script>
