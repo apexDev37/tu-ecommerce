@@ -8,5 +8,4 @@ from .models import Product
 
 def index(request):
     context = {'message': 'products'}
-    return render(request, 'product/index.html', context)  
-    
+    return render(request, 'product/index.html', context)

@@ -11,7 +11,6 @@ class Category(models.Model):
         return (f'{self.name}')
 
 
-
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
