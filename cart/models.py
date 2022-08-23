@@ -25,8 +25,7 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return ('<Id: %d Quantity: %d Total Price: %.2f Complete: %r >' % (
-                    self.id, 
-                    self.quantity, 
-                    self.total_price, 
-                    self.is_complete))
-
+            self.id,
+            self.quantity,
+            self.total_price,
+            self.is_complete))
