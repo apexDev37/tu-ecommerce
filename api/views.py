@@ -11,13 +11,12 @@ from .serializers import ProductSerializer
 # ----------------------------API Endpoints---------------------------- #
 
 
-
 # ----------------------------Products---------------------------- #
 
 
 @api_view(['GET'])
 def get_all_products(request):
-    """ 
+    """
     app: product
     resource: Product
     methods: GET
@@ -27,5 +26,3 @@ def get_all_products(request):
     products = Product.objects.all().order_by('title')
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
-
-
